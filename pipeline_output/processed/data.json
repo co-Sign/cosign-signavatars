@@ -1,0 +1,42 @@
+{
+  "sample_001": {
+    "hamnosys_text": "hamnosys_1",
+    "gloss": "HELLO"
+  },
+  "sample_002": {
+    "hamnosys_text": "hamnosys_2",
+    "gloss": "THANK_YOU"
+  },
+  "sample_003": {
+    "hamnosys_text": "hamnosys_3",
+    "gloss": "PLEASE"
+  },
+  "sample_004": {
+    "hamnosys_text": "hamnosys_4",
+    "gloss": "SORRY"
+  },
+  "sample_005": {
+    "hamnosys_text": "hamnosys_5",
+    "gloss": "YES"
+  },
+  "sample_006": {
+    "hamnosys_text": "hamnosys_6",
+    "gloss": "NO"
+  },
+  "sample_007": {
+    "hamnosys_text": "hamnosys_7",
+    "gloss": "HELP"
+  },
+  "sample_008": {
+    "hamnosys_text": "hamnosys_8",
+    "gloss": "WANT"
+  },
+  "sample_009": {
+    "hamnosys_text": "hamnosys_9",
+    "gloss": "NAME"
+  },
+  "sample_010": {
+    "hamnosys_text": "hamnosys_10",
+    "gloss": "SIGN"
+  }
+}

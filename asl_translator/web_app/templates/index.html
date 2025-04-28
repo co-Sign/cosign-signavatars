@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASL Translator</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">ASL Translator</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modelModal">
+                            <i class="fas fa-cog"></i> Load Model
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Translation Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Speech to ASL Translation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="textInput" class="form-label">Enter English Text:</label>
+                            <textarea class="form-control mb-2" id="textInput" rows="3" placeholder="Type English text here..."></textarea>
+                            <div class="d-grid">
+                                <button class="btn btn-primary" id="translateTextBtn">Translate Text</button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Record Speech:</label>
+                            <div class="d-flex justify-content-center mb-2">
+                                <button class="btn btn-danger me-2" id="recordBtn">
+                                    <i class="fas fa-microphone"></i> Record
+                                </button>
+                                <button class="btn btn-secondary" id="stopBtn" disabled>
+                                    <i class="fas fa-stop"></i> Stop
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Continuous Mode:</label>
+                            <div class="d-flex justify-content-center">
+                                <button class="btn btn-success me-2" id="startListeningBtn">
+                                    <i class="fas fa-headphones"></i> Start Listening
+                                </button>
+                                <button class="btn btn-danger" id="stopListeningBtn" disabled>
+                                    <i class="fas fa-headphones-alt"></i> Stop Listening
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Translation Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">English Text:</label>
+                            <div class="p-2 bg-light border rounded mb-3" id="englishResult">
+                                <em class="text-muted">Results will appear here...</em>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ASL Gloss:</label>
+                            <div class="p-2 bg-light border rounded" id="aslResult">
+                                <em class="text-muted">Results will appear here...</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avatar Visualization Card -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Avatar Visualization</h5>
+                    </div>
+                    <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 400px;">
+                        <div id="avatarContainer">
+                            <p class="text-center text-muted">Avatar visualization will appear here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Translations Card -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Recent Translations</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group" id="recentTranslations">
+                            <li class="list-group-item text-center text-muted">No recent translations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Configuration Modal -->
+    <div class="modal fade" id="modelModal" tabindex="-1" aria-labelledby="modelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modelModalLabel">Load ASL Translation Model</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modelForm">
+                        <div class="mb-3">
+                            <label for="modelPath" class="form-label">Model Path:</label>
+                            <input type="text" class="form-control" id="modelPath" required>
+                            <div class="form-text">Path to the trained model file (.pth)</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="labelMappingsPath" class="form-label">Label Mappings Path:</label>
+                            <input type="text" class="form-control" id="labelMappingsPath" required>
+                            <div class="form-text">Path to the label mappings file (.json)</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="loadModelBtn">Load Model</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="statusToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header" id="toastHeader">
+                <strong class="me-auto" id="toastTitle">Status</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                Status message
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
