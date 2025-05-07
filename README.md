@@ -252,3 +252,124 @@ Then, the results will be saved in `./render_results_overlay/` (default shape he
 
 ## Contact
 For technical questions, please contact ZhengdiYu@hotmail.com or z.yu23@imperial.ac.uk. For license, please contact shaolihuang@tencent.com.
+
+## ASL Recognition Pipeline with HamNoSys
+
+This project implements an enhanced deep learning pipeline for sign language recognition using HamNoSys (Hamburg Notation System) data.
+
+## Setup
+
+1. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+2. Verify GPU availability (optional):
+
+```bash
+python -c "import tensorflow as tf; print(f'TensorFlow: {tf.__version__}, GPU available: {len(tf.config.list_physical_devices(\"GPU\")) > 0}')"
+```
+
+## Data Preparation
+
+The pipeline uses HamNoSys data from `datasets/hamnosys2motion/data.json`. To prepare the data with advanced preprocessing:
+
+```bash
+python prepare_hamnosys_data.py --data-file datasets/hamnosys2motion/data.json --output-dir data/hamnosys_data --min-length 5 --min-samples 3 --max-classes 50 --augment
+```
+
+This script:
+- Loads HamNoSys sequences from the specified data file
+- Filters sequences by minimum length (now defaults to 5 characters)
+- Ensures each class has at least 3 samples for better learning
+- Selects the top 50 classes with the most examples for better accuracy
+- Applies advanced encoding with character type classification
+- Augments data to increase sample size and reduce class imbalance
+- Processes data in parallel batches for efficiency
+- Saves the prepared data to the output directory
+
+Options:
+- `--min-length`: Minimum HamNoSys sequence length to include (default: 5)
+- `--min-samples`: Minimum number of samples per class (default: 3)
+- `--max-classes`: Maximum number of classes to include (default: 50)
+- `--batch-size`: Batch size for processing data (default: 100)
+- `--augment`: Apply data augmentation to increase samples
+- `--include-wlasl`: Include WLASL dataset for additional features
+- `--num-workers`: Number of workers for parallel processing
+
+## Training
+
+To train the enhanced model on the prepared HamNoSys data:
+
+```bash
+python train_hamnosys.py --data-dir data/hamnosys_data --output-dir models/hamnosys --prepare-data --augment --batch-size 16 --epochs 150 --lr 0.0005
+```
+
+This script:
+- Prepares data if needed with augmentation
+- Loads the prepared HamNoSys data with improved features
+- Calculates class weights to handle imbalanced classes
+- Splits the data into training, validation, and test sets
+- Creates an enhanced CNN-LSTM hybrid model with attention
+- Trains the model with optimized parameters
+- Evaluates the model on the test set
+- Saves the trained model in .keras format
+
+Options:
+- `--batch-size`: Batch size for training (default: 16)
+- `--epochs`: Number of epochs to train (default: 150)
+- `--lr`: Learning rate for optimizer (default: 0.0005)
+- `--use-attention`: Use self-attention mechanism (default: True)
+- `--attention-heads`: Number of attention heads (default: 4)
+- `--use-residual`: Use residual connections (default: True)
+- `--use-class-weights`: Use class weights for imbalanced data (default: True)
+- `--conv-filters`: Number of filters in each convolutional layer (default: [64, 128, 256])
+- `--kernel-sizes`: Kernel size for each convolutional layer (default: [5, 3, 3])
+- `--pool-sizes`: Pool size for each MaxPooling layer (default: [2, 2, 2])
+- `--lstm-units`: Number of units in each LSTM layer (default: [256, 128])
+- `--dropout-rate`: Dropout rate for regularization (default: 0.25)
+- `--l2-reg`: L2 regularization factor (default: 0.0005)
+- `--prepare-data`: Run data preparation script before training
+
+## Model Architecture
+
+The enhanced model architecture is a CNN-LSTM hybrid with the following components:
+- Convolutional layers with batch normalization, spatial dropout and residual connections
+- Multi-head self-attention mechanism for better sequence understanding
+- Bidirectional LSTM layers with layer normalization
+- Dual dense layers with dropout regularization for better feature extraction
+
+The model is designed to capture both spatial features within each HamNoSys token and complex temporal patterns across the sequence, with special attention to the relationships between different parts of the sign.
+
+## Performance Optimization
+
+The pipeline includes several optimizations to improve model performance:
+- Data augmentation to increase training samples
+- Class weighting to handle imbalanced datasets
+- Improved feature extraction from HamNoSys characters
+- Multi-head attention for capturing complex relationships
+- Residual connections to improve gradient flow
+- Reduced dropout and L2 regularization for more stable training
+- Early stopping with appropriate patience to prevent overfitting
+- Learning rate scheduling to optimize convergence
+
+## Inference
+
+To run inference with a trained model:
+
+```bash
+python src/inference.py --model-path models/hamnosys/hamnosys_model_TIMESTAMP/best_model.keras --data-dir data/hamnosys_data
+```
+
+This will load the specified model and evaluate it on the test set.
+
+## API
+
+To serve the model via a REST API:
+
+```bash
+python src/api.py --model-path models/hamnosys/hamnosys_model_TIMESTAMP/best_model.keras
+```
+
+The API will be available at http://localhost:5000/predict.

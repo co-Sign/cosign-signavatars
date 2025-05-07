@@ -1,0 +1,8 @@
+{
+  "accuracy": 0.4,
+  "top_3_accuracy": 0.8,
+  "inference_time_seconds": 6.573199987411499,
+  "inference_time_per_sample_ms": 46.95142848151071,
+  "num_test_samples": 140,
+  "num_classes": 6
+}

@@ -1,0 +1,24 @@
+                    precision    recall  f1-score   support
+
+           bać się       0.06      1.00      0.11         1
+             mówić       0.00      0.00      0.00         2
+           autobus       0.00      0.00      0.00         1
+              spać       0.00      0.00      0.00         2
+            cebula       0.00      0.00      0.00         1
+       nie słyszeć       0.00      0.00      0.00         0
+             bawić       0.00      0.00      0.00         2
+           rodzina       0.00      0.00      0.00         1
+          siedzieć       0.00      0.00      0.00         1
+            czytać       0.00      0.00      0.00         3
+             mocny       0.00      0.00      0.00         1
+              jeść       0.00      0.00      0.00         3
+            wysoki       0.00      0.00      0.00         2
+   aparat słuchowy       0.00      0.00      0.00         2
+         śmiać się       0.00      0.00      0.00         1
+otworzyć, otwierać       0.00      0.00      0.00         2
+          drukować       0.00      0.00      0.00         2
+          zauważyć       0.00      0.00      0.00         2
+
+          accuracy                           0.03        29
+         macro avg       0.00      0.06      0.01        29
+      weighted avg       0.00      0.03      0.00        29

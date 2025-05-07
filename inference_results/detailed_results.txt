@@ -1,0 +1,13 @@
+Overall Accuracy: 0.4000 (40.00%)
+
+Top-1 Accuracy: 0.4000 (40.00%)
+Top-2 Accuracy: 0.6286 (62.86%)
+Top-3 Accuracy: 0.8000 (80.00%)
+
+Per-class Accuracy:
+nie słyszeć: 0.5926 (59.26%)
+autobus: 0.5714 (57.14%)
+spać: 0.5417 (54.17%)
+bać się: 0.4783 (47.83%)
+mówić: 0.0000 (0.00%)
+cebula: 0.0000 (0.00%)
